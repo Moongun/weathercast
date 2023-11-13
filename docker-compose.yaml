@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+    web:
+        image: nginx:1.25-alpine
+        volumes:
+            - ./App:$WEB_CODEDIR
+            - ./templates:/etc/nginx/templates
+        environment:
+            WEB_PORT: $WEB_PORT_TARGET
+            WEB_HOSTNAME: $WEB_HOSTNAME
+            WEB_CODEDIR: $WEB_CODEDIR
+            WEB_ERRORLOG_DIR: $WEB_ERRORLOG_DIR
+            WEB_ACCESSLOG_DIR: $WEB_ACCESSLOG_DIR
+        ports:
+            - ${WEB_PORT_PUBLISHED}:${WEB_PORT_TARGET}
+        networks:
+            - weathercast_net
+
+    php:
+        build:
+            context: .
+        volumes:
+            - ./App:$PHP_CODEDIR
+        environment:
+            MYSQL_USER: $DB_USER
+            MYSQL_PASSWORD: $DB_PASSWORD
+            MYSQL_DATABASE: $DB_DATABASE_NAME
+            APP_WEATHER_MAP_API_ID: $APP_WEATHER_MAP_API_ID
+            APP_METEO_MATICS_CREDENTIALS: $APP_METEO_MATICS_CREDENTIALS
+        networks:
+            - weathercast_net
+
+    database:
+        image: mysql:8.2.0
+        environment:
+            MYSQL_USER: $DB_USER
+            MYSQL_PASSWORD: $DB_PASSWORD
+            MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+            MYSQL_DATABASE: $DB_DATABASE_NAME
+        ports:
+            - ${DB_PORT_PUBLISHED}:${DB_PORT_TARGET}
+        networks:
+            - weathercast_net
+
+networks:
+    weathercast_net:
+        driver: bridge
