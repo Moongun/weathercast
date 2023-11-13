@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% if temperature is not null %}
+            <hr class="hr"/>
+            <div class="text-center">
+                <span> Temperature in your city: </span> <span class="font-weight-bold">{{ temperature }}C</span>
+            </div>
+            <hr class="hr"/>
+        {% endif %}
+        <div>
+            {{ form(form) }}
+        </div>
+    </div>
+{% endblock %}

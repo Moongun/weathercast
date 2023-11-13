@@ -1,0 +1,13 @@
+web:
+    resource:
+        path: ../src/Controller/Web
+        namespace: App\Controller\Web
+    type: attribute
+
+api:
+    resource:
+        path: ../src/Controller/Api
+        namespace: App\Controller\Api
+    prefix: /api
+    name_prefix: api_
+    type: attribute
